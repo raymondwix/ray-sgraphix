@@ -185,15 +185,15 @@
                 
                   <div class="form-group">
                     <label>Name:</label>
-                    <input type="text" name="name" class="form-control" id="nam">
+                    <input type="text" name="name" class="form-control" id="name">
                   </div>
                   <div class="form-group">
                     <label>Email:</label>
-                    <input type="email" name="email" class="form-control"id="emai">
+                    <input type="email" name="email" class="form-control"id="email">
                   </div>
                   <div class="form-group">
                     <label>Number:</label>
-                    <input type="text" name="number" class="form-control" id="numbe">
+                    <input type="text" name="number" class="form-control" id="number">
                   </div>
                   <button type="submit" class="btn btn-success" id="send">Submit</button>
                 </form>
@@ -240,41 +240,7 @@
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         
           
-<!--          
-          <script>
-            // ..........Config..............
-            const firebaseConfig = {
-              apiKey: "AIzaSyBgeG3KjxSgVXMswB5ZT6Ets75Avgy0I_c",
-                  authDomain: "rays-graphix-f0c7b.firebaseapp.com",
-                  projectId: "rays-graphix-f0c7b",
-                  storageBucket: "rays-graphix-f0c7b.appspot.com",
-                  messagingSenderId: "391625780481",
-                  appId: "1:391625780481:web:6b7b4dfa126feb5b2cbf00",
-                  measurementId: "G-YW271CBQDY"
-                  };
-                  const app = initizeApp(firebaseConfig);
-                
-              
-                 //..................get Data.........
-                 var  name, email , number;
-              function SendData(){
-                name = document.getElementById("name").value;
-                email = document.getElementById("email").value;
-                number = document.getElementById("number").value;
-              }
 
-    //  ......................send Data
-
-            document.getElementById("submit").onclick = function(){
-              var dbRef = firebase.database;
-              SendData();
-              dbRef().ref("Orders").set({
-              Customer_name: name,
-              Customer_email: email,
-              Customer_number: number,
-              });
-            }
-          </script> -->
           </script>
        
           
@@ -283,15 +249,12 @@
 
 <script type="module">
   // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-  import { getDatabase, set , ref} from "https://www.gstatic.com/firebasejs/9.6.10/firebase/database.js"
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js";
+  import { getDatabase,set, ref ,push, child, onValue } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js"
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.11/firebase-analytics.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseCon = {
+  //Firebase Configuration 
+  const firebaseConfig = {
     apiKey: "AIzaSyBgeG3KjxSgVXMswB5ZT6Ets75Avgy0I_c",
     authDomain: "rays-graphix-f0c7b.firebaseapp.com",
     databaseURL: "https://rays-graphix-f0c7b-default-rtdb.firebaseio.com",
@@ -303,41 +266,27 @@
   };
 
   // Initialize Firebase
-  const site = initializeApp(firebaseCon);
-  const analytics = getAnalytics(site);
+  const app = initializeApp(firebaseConfig);
+  //firebase analytics
+  const analytics = getAnalytics(app);
 
+// firebase databse reference
   const database = getDatabase(app);
-  var  name, email , number;
-              function SendData(){
-                name = document.getElementById("nam").value;
-                email = document.getElementById("emai").value;
-                number = document.getElementById("numbe").value;
-              }
-
-    //  ......................send Data
-
-            document.getElementById("send").onclick = function(){
-              var dbRef = firebase.database;
-              SendData();
-              dbRef().ref("Orders").set({
-              Customer_name: name,
-              Customer_email: email,
-              Customer_number: number,
-              });
-            }
-
-
-    
-// send.addEventListener('click', (e)=>{
-//   var name = document.getElementById("nam").value;
-//   var email = document.getElementById("emai").value;
-//   var number = document.getElementById("numbe").value;
-
+//*get data from the user input in the text field form* the #send# is the submit button id for send data to firebase
+  send.addEventListener('click',(e) => {
+    var customerName = document.getElementById('name').value;  
+    var customerEmail = document.getElementById('email').value;  
+    var customerNumber = document.getElementById('number').value;  
+// automatically generates ID for user
+    const userId = push(child(ref(database), 'users')).key;
+   
+    //Send data to firebase
+    set(ref(database, 'users/'+ userId), {
+    firstName:  customerName,
+    phone: customerNumber,
+    email : customerEmail
+   });
+   alert('Tap to send');
+  });
   
-//   set(ref(database, 'users' ), {
-//     name: name,
-//     email: email,
-//     number: number
-//   });
-// }
 </script>
